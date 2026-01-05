@@ -1,53 +1,49 @@
 package com.example.biblioteca.controller;
 
+import com.example.biblioteca.dto.LivroRequestDTO;
+import com.example.biblioteca.dto.LivroResponseDTO;
 import com.example.biblioteca.model.Livro;
 import com.example.biblioteca.repository.LivroRepository;
+import com.example.biblioteca.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/livros")
+@RequestMapping("/api/livros")
 public class LivroController {
 
+    private LivroService livroService;
+
     @Autowired
-    private LivroRepository livroRepository;
-
-    // Listar todos os livros
+    public LivroController(LivroService livroService) {
+        this.livroService = livroService;
+    }
     @GetMapping
-    public List<Livro> listar() {
-        return livroRepository.findAll();
+    public Page<LivroResponseDTO> listarTodos(
+            @PageableDefault(
+                    size = 5,
+                    sort = "titulo"
+            )
+            Pageable pageable){
+        return livroService.listarTodos(pageable);
     }
-
-    // Adicionar um livro
-    @PostMapping
-    public List<Livro> adicionarLista(@RequestBody List<Livro> livros) {
-        return livroRepository.saveAll(livros);
-    }
-
-
-    // Buscar livro por id
     @GetMapping("/{id}")
-    public Livro buscar(@PathVariable Long id) {
-        return livroRepository.findById(id).orElse(null);
+    public LivroResponseDTO buscarPorId(@PathVariable Long id){
+        return livroService.buscarPorId(id).orElse(null);
+    }
+    @PostMapping
+    public LivroResponseDTO salvar(@RequestBody LivroRequestDTO dto){
+        return livroService.salvar(dto);
     }
 
-    // Atualizar livro
-    @PutMapping("/{id}")
-    public Livro atualizar(@PathVariable Long id, @RequestBody Livro livroAtualizado) {
-        return livroRepository.findById(id).map(l -> {
-            l.setTitulo(livroAtualizado.getTitulo());
-            l.setAutor(livroAtualizado.getAutor());
-            l.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
-            l.setIsbn(livroAtualizado.getIsbn());
-            return livroRepository.save(l);
-        }).orElse(null);
-    }
-
-    // Deletar livro
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-        livroRepository.deleteById(id);
+    public void deletar(@PathVariable Long id){
+        livroService.deletar(id);
     }
+
 }
