@@ -183,3 +183,115 @@ Se você quiser trocar ideias, tirar dúvidas ou colaborar em projetos, sinta-se
 💼 LinkedIn: linkedin.com/in/lucas-viana-souza
 
 📧 E-mail: lucasvianasouza4@gmai.com
+
+📌 Atualização do README – Novas Funcionalidades
+🚀 Funcionalidades Implementadas
+
+A API de Biblioteca evoluiu e agora conta com as seguintes funcionalidades:
+
+✅ CRUD completo de livros
+
+✅ Persistência em banco de dados relacional
+
+✅ Uso de DTOs (Data Transfer Objects) para entrada e saída de dados
+
+✅ Paginação na listagem de livros
+
+✅ Tratamento de exceções padronizado
+
+✅ Testes via Postman
+
+✅ Versionamento com Git e GitHub
+
+📦 DTOs (Data Transfer Objects)
+
+Para melhorar a organização, segurança e desacoplamento da aplicação, foram implementados DTOs:
+
+🔹 LivroRequestDTO
+
+Utilizado para criação e atualização de livros.
+
+Exemplo:
+
+{
+  "titulo": "Clean Code",
+  "autor": "Robert C. Martin",
+  "anoPublicacao": 2008,
+  "isbn": "9780132350884"
+}
+
+🔹 LivroResponseDTO
+
+Utilizado para retornar dados ao cliente, evitando exposição direta da entidade.
+
+Exemplo:
+
+{
+  "id": 1,
+  "titulo": "Clean Code",
+  "autor": "Robert C. Martin",
+  "anoPublicacao": 2008,
+  "isbn": "9780132350884"
+}
+
+📄 Paginação
+
+A listagem de livros agora suporta paginação, facilitando o consumo da API e melhorando a performance.
+
+🔹 Endpoint
+GET /api/livros
+
+🔹 Parâmetros opcionais
+Parâmetro	Descrição	Exemplo
+page	Página (inicia em 0)	page=0
+size	Quantidade por página	size=5
+sort	Campo de ordenação	sort=titulo,asc
+🔹 Exemplo de requisição
+GET /api/livros?page=0&size=5&sort=titulo,asc
+
+🔹 Exemplo de resposta
+{
+  "content": [
+    {
+      "id": 1,
+      "titulo": "Clean Code",
+      "autor": "Robert C. Martin",
+      "anoPublicacao": 2008,
+      "isbn": "9780132350884"
+    }
+  ],
+  "totalElements": 10,
+  "totalPages": 2,
+  "size": 5,
+  "number": 0
+}
+
+🧪 Testes com Postman
+
+Todos os endpoints foram testados utilizando o Postman.
+
+Exemplos de testes:
+
+🔹 Criar livro (POST /api/livros)
+
+🔹 Listar livros com paginação (GET /api/livros)
+
+🔹 Buscar livro por ID (GET /api/livros/{id})
+
+🔹 Atualizar livro (PUT /api/livros/{id})
+
+🔹 Deletar livro (DELETE /api/livros/{id})
+
+📈 Próximos Passos (Evolução do Projeto)
+
+🔐 Implementar autenticação com Spring Security + JWT
+
+🧪 Testes automatizados (JUnit e Mockito)
+
+📑 Documentação com Swagger/OpenAPI
+
+🧱 Camada de validação com Bean Validation
+
+🐳 Dockerização da aplicação
+
+📊 Logs e monitoramento
