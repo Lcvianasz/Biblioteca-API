@@ -1,217 +1,93 @@
 📚 Biblioteca API
 
-API desenvolvida com Spring Boot e MySQL para o gerenciamento de uma biblioteca.
-O sistema permite cadastrar, listar, buscar e remover livros, oferecendo uma base sólida para futuras expansões, como cadastro de autores, usuários e controle de empréstimos.
+API REST desenvolvida em Java com Spring Boot para gerenciamento de uma biblioteca, permitindo cadastro, consulta, atualização e remoção de livros.
+O projeto utiliza Spring Security com JWT para autenticação, MySQL como banco de dados e segue boas práticas de arquitetura com DTOs, Services e Repositories.
 
-🧩 Tecnologias Utilizadas
+🚀 Tecnologias Utilizadas
 
-☕ Java 17+
+Java 17
 
-🚀 Spring Boot (Web, Data JPA)
-
-🗄️ MySQL
-
-🧰 Maven
-
-🧪 Postman / Insomnia (para testes)
-
-🧱 Spring DevTools (para hot reload em desenvolvimento)
-
-⚙️ Configuração do Projeto
-1️⃣ Criar o projeto no Spring Initializr
-
-Configurações:
-
-Project: Maven Project
-
-Language: Java
-
-Spring Boot: 3.x
-
-Packaging: Jar
-
-Java: 17
-
-Dependências:
+Spring Boot
 
 Spring Web
 
 Spring Data JPA
 
-MySQL Driver
+Spring Security
 
-Spring Boot DevTools
+JWT (JSON Web Token)
 
-Baixe o arquivo .zip e extraia em sua máquina.
+MySQL
 
-🧠 Estrutura de Pastas
-biblioteca/
-├── src/
-│   ├── main/
-│   │   ├── java/com/example/biblioteca/
-│   │   │   ├── controller/     -> Controladores REST
-│   │   │   ├── model/          -> Entidades (Livros, Autores, etc.)
-│   │   │   ├── repository/     -> Interfaces JPA
-│   │   │   └── service/        -> Regras de negócio
-│   │   └── resources/
-│   │       ├── application.properties
-│   │       └── static/ e templates/ (opcional)
-└── pom.xml
+Lombok
 
-🧾 Exemplo de Entidade: Livro.java
-package com.example.biblioteca.model;
+Maven
 
-import jakarta.persistence.*;
+Postman (para testes)
 
-@Entity
-public class Livro {
+🏗️ Arquitetura do Projeto
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+O projeto segue uma arquitetura em camadas:
 
-    private String titulo;
-    private String autor;
-    private int anoPublicacao;
-    private String isbn;
-
-    // Getters e Setters
-}
-
-💾 Configuração do Banco de Dados (MySQL)
-
-No arquivo src/main/resources/application.properties, adicione:
-
-spring.datasource.url=jdbc:mysql://localhost:3306/biblioteca?useSSL=false&serverTimezone=UTC
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+controller → dto → service → repository → database
 
 
-⚠️ Certifique-se de criar o banco antes de rodar o projeto:
+Principais pacotes:
 
-CREATE DATABASE biblioteca;
+controller – Endpoints REST
 
-🧩 Controller: LivroController.java
-package com.example.biblioteca.controller;
+dto – Objetos de transferência de dados (Request/Response)
 
-import com.example.biblioteca.model.Livro;
-import com.example.biblioteca.service.LivroService;
-import org.springframework.web.bind.annotation.*;
+model – Entidades JPA
 
-import java.util.List;
+repository – Repositórios Spring Data
 
-@RestController
-@RequestMapping("/livros")
-public class LivroController {
+security – Configuração de segurança, JWT e autenticação
 
-    private final LivroService livroService;
+service – Regras de negócio
 
-    public LivroController(LivroService livroService) {
-        this.livroService = livroService;
-    }
+🔐 Autenticação e Segurança
 
-    @GetMapping
-    public List<Livro> listarTodos() {
-        return livroService.listarTodos();
-    }
+A API utiliza Spring Security + JWT.
 
-    @GetMapping("/{id}")
-    public Livro buscarPorId(@PathVariable Long id) {
-        return livroService.buscarPorId(id).orElse(null);
-    }
+Login gera um token JWT
 
-    @PostMapping
-    public Livro salvar(@RequestBody Livro livro) {
-        return livroService.salvar(livro);
-    }
+O token deve ser enviado no header Authorization
 
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-        livroService.deletar(id);
-    }
-}
+Endpoints protegidos exigem autenticação
 
-🧪 Testando com Postman
-1️⃣ Listar livros
+Header de autenticação:
+Authorization: Bearer SEU_TOKEN_AQUI
 
-GET → http://localhost:8080/livros
+🔑 Endpoint de Login
+POST /api/auth/login
 
-2️⃣ Buscar por ID
-
-GET → http://localhost:8080/livros/1
-
-3️⃣ Cadastrar livro
-
-POST → http://localhost:8080/livros
-Body (JSON):
+Request Body:
 
 {
-  "titulo": "O Senhor dos Anéis",
-  "autor": "J.R.R. Tolkien",
-  "anoPublicacao": 1954,
-  "isbn": "978-8533613379"
+  "username": "admin",
+  "password": "123456"
 }
 
-4️⃣ Deletar livro
 
-DELETE → http://localhost:8080/livros/1
+Response:
 
-🚀 Executando o Projeto
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9..."
+}
 
-No terminal (na pasta do projeto):
+📘 Endpoints de Livros
+📌 Listar livros (com paginação)
+GET /api/livros?page=0&size=5
 
-mvn spring-boot:run
+📌 Buscar livro por ID
+GET /api/livros/{id}
+
+📌 Criar livro
+POST /api/livros
 
 
-A API estará disponível em:
-👉 http://localhost:8080/livros
-
-🧑‍💻 Autor
-
-Desenvolvido por Lucas Viana 🧠
-💼 Projeto de estudo com foco em Spring Boot e APIs REST.
-
-📫 Entre em Contato
-
-Se você quiser trocar ideias, tirar dúvidas ou colaborar em projetos, sinta-se à vontade para entrar em contato!
-
-💻 GitHub: github.com/Lcvianasz
-
-💼 LinkedIn: linkedin.com/in/lucas-viana-souza
-
-📧 E-mail: lucasvianasouza4@gmai.com
-
-📌 Atualização do README – Novas Funcionalidades
-🚀 Funcionalidades Implementadas
-
-A API de Biblioteca evoluiu e agora conta com as seguintes funcionalidades:
-
-✅ CRUD completo de livros
-
-✅ Persistência em banco de dados relacional
-
-✅ Uso de DTOs (Data Transfer Objects) para entrada e saída de dados
-
-✅ Paginação na listagem de livros
-
-✅ Tratamento de exceções padronizado
-
-✅ Testes via Postman
-
-✅ Versionamento com Git e GitHub
-
-📦 DTOs (Data Transfer Objects)
-
-Para melhorar a organização, segurança e desacoplamento da aplicação, foram implementados DTOs:
-
-🔹 LivroRequestDTO
-
-Utilizado para criação e atualização de livros.
-
-Exemplo:
+Request Body:
 
 {
   "titulo": "Clean Code",
@@ -220,78 +96,92 @@ Exemplo:
   "isbn": "9780132350884"
 }
 
-🔹 LivroResponseDTO
+📌 Atualizar livro
+PUT /api/livros/{id}
 
-Utilizado para retornar dados ao cliente, evitando exposição direta da entidade.
-
-Exemplo:
-
-{
-  "id": 1,
-  "titulo": "Clean Code",
-  "autor": "Robert C. Martin",
-  "anoPublicacao": 2008,
-  "isbn": "9780132350884"
-}
+📌 Deletar livro
+DELETE /api/livros/{id}
 
 📄 Paginação
 
-A listagem de livros agora suporta paginação, facilitando o consumo da API e melhorando a performance.
+A listagem de livros utiliza Pageable do Spring Data.
 
-🔹 Endpoint
-GET /api/livros
+Exemplo:
 
-🔹 Parâmetros opcionais
-Parâmetro	Descrição	Exemplo
-page	Página (inicia em 0)	page=0
-size	Quantidade por página	size=5
-sort	Campo de ordenação	sort=titulo,asc
-🔹 Exemplo de requisição
-GET /api/livros?page=0&size=5&sort=titulo,asc
+GET /api/livros?page=0&size=10&sort=titulo,asc
 
-🔹 Exemplo de resposta
-{
-  "content": [
-    {
-      "id": 1,
-      "titulo": "Clean Code",
-      "autor": "Robert C. Martin",
-      "anoPublicacao": 2008,
-      "isbn": "9780132350884"
-    }
-  ],
-  "totalElements": 10,
-  "totalPages": 2,
-  "size": 5,
-  "number": 0
-}
+🔐 Configuração de Ambiente
 
-🧪 Testes com Postman
+⚠️ Dados sensíveis NÃO são versionados no GitHub.
 
-Todos os endpoints foram testados utilizando o Postman.
+O projeto utiliza variáveis de ambiente.
 
-Exemplos de testes:
+Variáveis necessárias:
 
-🔹 Criar livro (POST /api/livros)
+JWT_SECRET
 
-🔹 Listar livros com paginação (GET /api/livros)
+DB_USER
 
-🔹 Buscar livro por ID (GET /api/livros/{id})
+DB_PASSWORD
 
-🔹 Atualizar livro (PUT /api/livros/{id})
+Exemplo (application-example.properties):
+spring.application.name=biblioteca
 
-🔹 Deletar livro (DELETE /api/livros/{id})
+jwt.secret=CHANGE_ME
+jwt.expiration=3600000
 
-📈 Próximos Passos (Evolução do Projeto)
+spring.datasource.url=jdbc:mysql://localhost:3306/biblioteca
+spring.datasource.username=DB_USER
+spring.datasource.password=DB_PASSWORD
 
-🔐 Implementar autenticação com Spring Security + JWT
+🧪 Testes
 
-🧪 Testes automatizados (JUnit e Mockito)
+Os testes da API foram realizados utilizando o Postman, validando:
 
-📑 Documentação com Swagger/OpenAPI
+Autenticação JWT
 
-🧱 Camada de validação com Bean Validation
+Controle de acesso (403 Forbidden)
 
-🐳 Dockerização da aplicação
+CRUD completo de livros
 
-📊 Logs e monitoramento
+Paginação
+
+🗄️ Banco de Dados
+
+Tabela de usuários:
+
+CREATE TABLE usuarios (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+
+As senhas são armazenadas com BCrypt.
+
+📦 Como Executar o Projeto
+git clone https://github.com/Lcvianasz/Biblioteca-API.git
+cd Biblioteca-API
+mvn spring-boot:run
+
+🛠️ Melhorias Futuras
+
+Cadastro de usuários
+
+Controle de permissões (ADMIN / USER)
+
+Swagger / OpenAPI
+
+Testes automatizados (JUnit + Mockito)
+
+Dockerização do projeto
+
+Deploy em nuvem (Render / Railway)
+
+📬 Entre em Contato
+
+Autor: Lucas Viana
+
+GitHub: https://github.com/Lcvianasz
+
+LinkedIn: linkedin.com/in/lucas-viana-souza
