@@ -185,3 +185,84 @@ Autor: Lucas Viana
 GitHub: https://github.com/Lcvianasz
 
 LinkedIn: linkedin.com/in/lucas-viana-souza
+
+🔐 Autenticação com JWT e Testes Automatizados
+
+Esta versão da API inclui a implementação completa de autenticação e autorização utilizando Spring Security + JWT, além da adição de testes automatizados para garantir a confiabilidade das regras de negócio e dos endpoints.
+
+✨ Funcionalidades adicionadas
+
+Autenticação de usuários via JWT
+
+Geração e validação de token com chave secreta
+
+Proteção de rotas com Spring Security
+
+Endpoint público de login
+
+Criptografia de senha com BCrypt
+
+Integração com UserDetailsService
+
+Filtro JWT (OncePerRequestFilter) para autenticação automática
+
+Testes de:
+
+Service (camada de negócio)
+
+Controller (MockMvc)
+
+Segurança com @WithMockUser
+
+🔑 Endpoint de Login
+POST /api/auth/login
+
+
+Request Body
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+
+Response
+
+{
+  "token": "jwt_token_aqui"
+}
+
+
+O token retornado deve ser enviado no header Authorization para acessar rotas protegidas.
+
+Authorization: Bearer SEU_TOKEN_JWT
+
+🧪 Testes Automatizados
+
+Uso de JUnit 5 e Mockito
+
+Mock de serviços e repositórios
+
+Testes de controllers com MockMvc
+
+Suporte a paginação nos testes
+
+Isolamento da camada de segurança nos testes
+
+🛠 Tecnologias Utilizadas
+
+Spring Boot
+
+Spring Security
+
+JWT
+
+Lombok
+
+JPA / Hibernate
+
+MySQL
+
+JUnit 5
+
+Mockito
