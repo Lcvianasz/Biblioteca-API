@@ -266,3 +266,32 @@ MySQL
 JUnit 5
 
 Mockito
+
+🐳 Executando com Docker
+
+Este projeto pode ser executado utilizando Docker, sem necessidade de instalar Java ou Maven na máquina.
+
+📦 1. Gerar a imagem
+
+No diretório raiz do projeto, execute:
+
+docker build -t biblioteca-api .
+
+▶️ 2. Rodar o container
+docker run -p 8080:8080 biblioteca-api
+
+
+A aplicação estará disponível em:
+
+http://localhost:8080
+
+🛑 3. Parar o container
+
+Para listar os containers em execução:
+
+docker ps
+
+
+Para parar:
+
+docker stop <ID_DO_CONTAINER>
